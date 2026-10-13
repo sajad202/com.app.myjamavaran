@@ -62,11 +62,11 @@ jobs:
           }
 
           android {
-              namespace 'ir.fcjamavaran.app'
+              namespace 'com.app.myjamavaran'
               compileSdk 34
 
               defaultConfig {
-                  applicationId "ir.fcjamavaran.app"
+                  applicationId "com.app.myjamavaran"
                   minSdk 24
                   targetSdk 34
                   versionCode 2
@@ -141,9 +141,7 @@ jobs:
       - name: Debug info (only if failed)
         if: failure()
         run: |
-          echo "=== root build.gradle ==="
-          cat build.gradle
-          echo "=== app/build.gradle (first lines) ==="
-          head -15 app/build.gradle
-          echo "=== app folder ==="
-          ls app/
+          echo "=== app/build.gradle (lines 1-12) ==="
+          head -12 app/build.gradle
+          echo "=== package check ==="
+          grep -o '"package_name": "[^"]*"' app/google-services.json
