@@ -1,27 +1,23 @@
 plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
-}
-
-def gsFile = file("google-services.json")
-if (gsFile.exists()) {
-    apply plugin: 'com.google.gms.google-services'
+    id 'com.android.application' version '8.5.2'
+    id 'org.jetbrains.kotlin.android' version '1.9.24'
+    id 'com.google.gms.google-services' version '4.4.2'
 }
 
 android {
-    namespace 'com.app.myjamavaran'
+    namespace 'ir.fcjamavaran.app'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.app.myjamavaran"
+        applicationId "ir.fcjamavaran.app"
         minSdk 24
         targetSdk 34
-        versionCode 9
-        versionName "3.1.0"
+        versionCode 2
+        versionName "1.0.1"
 
         buildConfigField "boolean", "ALLOW_HTTP", "false"
         buildConfigField "boolean", "EXTERNAL_IN_APP", "false"
-        buildConfigField "boolean", "PULL_REFRESH", "false"
+        buildConfigField "boolean", "PULL_REFRESH", "true"
         buildConfigField "boolean", "UPLOAD_ENABLED", "true"
         buildConfigField "boolean", "DOWNLOADS_ENABLED", "true"
         buildConfigField "boolean", "ZOOM_ENABLED", "false"
@@ -31,9 +27,19 @@ android {
         buildConfigField "String", "CUSTOM_JS", "\"\""
     }
 
+    signingConfigs {
+        release {
+            storeFile rootProject.file("keystore.jks")
+            storePassword "Jamavaran2024SecureKey"
+            keyAlias "upload"
+            keyPassword "Jamavaran2024SecureKey"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
