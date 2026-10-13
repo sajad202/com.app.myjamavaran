@@ -8,8 +8,6 @@ if (gsFile.exists()) {
     apply plugin: 'com.google.gms.google-services'
 }
 
-def ksFile = rootProject.file("keystore.jks")
-
 android {
     namespace 'ir.fcjamavaran.app'
     compileSdk 34
@@ -28,28 +26,24 @@ android {
         buildConfigField "boolean", "DOWNLOADS_ENABLED", "true"
         buildConfigField "boolean", "ZOOM_ENABLED", "false"
         buildConfigField "String", "REST_BASE", "\"https://my.fc-jamavaran.ir/admin/appsaz/\""
-        buildConfigField "String", "APP_KEY", "\"JV70ec9cac190e475a""
+        buildConfigField "String", "APP_KEY", "\"JV70ec9cac190e475a\""
         buildConfigField "String", "CUSTOM_CSS", "\"\""
         buildConfigField "String", "CUSTOM_JS", "\"\""
     }
 
     signingConfigs {
-        if (ksFile.exists()) {
-            release {
-                storeFile ksFile
-                storePassword "Jamavaran2024SecureKey"
-                keyAlias "upload"
-                keyPassword "Jamavaran2024SecureKey"
-            }
+        release {
+            storeFile rootProject.file("keystore.jks")
+            storePassword "Jamavaran2024SecureKey"
+            keyAlias "upload"
+            keyPassword "Jamavaran2024SecureKey"
         }
     }
 
     buildTypes {
         release {
             minifyEnabled false
-            if (ksFile.exists()) {
-                signingConfig signingConfigs.release
-            }
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
