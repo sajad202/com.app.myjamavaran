@@ -18,7 +18,6 @@
 - [دانلود از مایکت](https://myket.ir/app/com.app.myjamavaran)
 - [بخش اپلیکیشن وب‌سایت باشگاه](https://fc-jamavaran.ir/app/#premium)
 
-**هدف این نسخه:** انتشار نسخه مستقل اندروید، بدون تبلیغات WebIntoApp، با حفظ امضای نسخه قبلی.
 
 بعد از تنظیم Secretها، پروژه را به شاخه `main` یا `master` پوش کنید یا از مسیر `Actions`، ورک‌فلو را دستی اجرا کنید. خروجی APK و AAB در بخش Artifacts قرار می‌گیرد.
 
