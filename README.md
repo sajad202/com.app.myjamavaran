@@ -1,61 +1,24 @@
-# جام‌آوران من — سورس آماده بیلد نسخه ۲.۷
+# جام‌آوران من — نسخه ۲.۷
 
-## تغییرات این نسخه
-- شناسه برنامه روی `com.app.myjamavaran` تنظیم شده تا با نسخه ۲.۶ یکسان باشد.
-- نسخه روی `2.7` و `versionCode` روی `207` تنظیم شده است؛ نسخه قبلی ارائه‌شده `versionCode=206` داشت.
-- تنظیمات Gradle اصلاح شده‌اند.
-- کلید اشتباه موجود در مخزن GitHub حذف شده است.
-- فایل کلید خصوصی داخل این ZIP قرار داده نشده تا تصادفاً در مخزن عمومی منتشر نشود.
-- در سورس اندروید، SDK یا کد تبلیغاتی WebIntoApp پیدا نشد. اسپلش بومی فعلی فقط پس‌زمینه و لوگوی برنامه است.
+<badge>نسخه مخصوص انتشار رسمی</badge>
 
-> توجه: برنامه صفحه وب `https://my.fc-jamavaran.ir/` را داخل WebView باز می‌کند. اگر خود وب‌سایت تبلیغ نشان دهد، باید جداگانه در کد/محتوای سایت بررسی شود.
+**وضعیت:** در حال آماده‌سازی انتشار
 
-## کلید امضای صحیح نسخه قبلی
-فایل ZIP قبلی WebIntoApp را باز کنید و این فایل را از مسیر زیر استخراج کنید:
+**مقاصد انتشار:**
+- فروشگاه مایکت
+- وب‌سایت رسمی باشگاه جام‌آوران
 
-`android/my-release-key.jks`
+**مشخصات انتشار:**
+- Version: 2.7
+- Version Code: 207
+- Package Name: `com.app.myjamavaran`
+- Signing: گواهی نسخه قبلی
 
-این کلید با گواهی امضای APK نسخه ۲.۶ تطبیق داده شد. از `keystore.jks` قدیمی موجود در مخزن GitHub استفاده نکنید؛ گواهی آن متفاوت است.
+**لینک‌های رسمی:**
+- [دانلود از مایکت](https://myket.ir/app/com.app.myjamavaran)
+- [بخش اپلیکیشن وب‌سایت باشگاه](https://fc-jamavaran.ir/app/#premium)
 
-Alias کلید قبلی:
-
-`myjamavaran`
-
-رمز Keystore و Private Key را از فایل `android/certification.txt` در ZIP قبلی WebIntoApp بردارید. برای فایل PKCS12، در صورت یکسان بودن رمزهای فایل، همان رمز را در هر دو فیلد وارد کنید.
-
-## بیلد محلی با Android Studio
-1. فایل `android/my-release-key.jks` را از ZIP قبلی WebIntoApp استخراج کنید.
-2. آن را در پوشه اصلی همین پروژه (کنار `settings.gradle`) کپی کنید و نامش را `my-release-key.jks` بگذارید.
-3. فایل `keystore.properties.example` را به `keystore.properties` کپی کنید.
-4. مقادیر رمز را در `keystore.properties` پر کنید. این فایل و فایل `.jks` نباید به GitHub پوش شوند.
-5. در Android Studio از Gradle اجرا کنید: `:app:assembleRelease`.
-
-## بیلد امن در GitHub Actions
-برای آنکه کلید خصوصی وارد مخزن عمومی نشود، در GitHub بروید به:
-`Settings → Secrets and variables → Actions → New repository secret`
-
-این چهار Secret را بسازید:
-
-- `RELEASE_KEYSTORE_BASE64`
-- `RELEASE_STORE_PASSWORD`
-- `RELEASE_KEY_ALIAS`
-- `RELEASE_KEY_PASSWORD`
-
-مقدارها:
-- `RELEASE_KEYSTORE_BASE64`: محتوای Base64 فایل `my-release-key.jks`
-- `RELEASE_STORE_PASSWORD`: رمز Keystore از `certification.txt`
-- `RELEASE_KEY_ALIAS`: مقدار `myjamavaran`
-- `RELEASE_KEY_PASSWORD`: رمز کلید خصوصی از `certification.txt`
-
-در Windows PowerShell برای ساخت مقدار Base64:
-```powershell
-[Convert]::ToBase64String([IO.File]::ReadAllBytes("my-release-key.jks"))
-```
-
-در Linux:
-```bash
-base64 -w 0 my-release-key.jks
-```
+**هدف این نسخه:** انتشار نسخه مستقل اندروید، بدون تبلیغات WebIntoApp، با حفظ امضای نسخه قبلی.
 
 بعد از تنظیم Secretها، پروژه را به شاخه `main` یا `master` پوش کنید یا از مسیر `Actions`، ورک‌فلو را دستی اجرا کنید. خروجی APK و AAB در بخش Artifacts قرار می‌گیرد.
 
