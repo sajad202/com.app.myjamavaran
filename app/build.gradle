@@ -22,8 +22,8 @@ android {
         applicationId 'com.app.myjamavaran'
         minSdk 24
         targetSdk 34
-        versionCode 207
-        versionName '2.7'
+        versionCode 20700
+        versionName "2.7"
 
         buildConfigField 'boolean', 'ALLOW_HTTP', 'false'
         buildConfigField 'boolean', 'EXTERNAL_IN_APP', 'false'
