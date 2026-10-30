@@ -1,3 +1,6 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
@@ -5,69 +8,65 @@ plugins {
 }
 
 def signingProperties = new Properties()
-def signingPropertiesFile = rootProject.file("keystore.properties")
-if (signingPropertiesFile.exists()) {
-    signingPropertiesFile.withInputStream { signingProperties.load(it) }
+def signingPropertiesFile = rootProject.file('keystore.properties')
+if (!signingPropertiesFile.exists()) {
+    throw new GradleException('Missing keystore.properties. Configure the original signing key before building a release.')
 }
-
-def requiredSigningKeys = ["storeFile", "storePassword", "keyAlias", "keyPassword"]
-def hasReleaseSigning = requiredSigningKeys.every {
-    signingProperties.getProperty(it) != null &&
-    !signingProperties.getProperty(it).trim().isEmpty()
-}
+signingProperties.load(new FileInputStream(signingPropertiesFile))
 
 android {
     namespace 'com.app.myjamavaran'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.app.myjamavaran"
+        applicationId 'com.app.myjamavaran'
         minSdk 24
         targetSdk 34
         versionCode 207
-        versionName "2.7"
+        versionName '2.7'
 
-        buildConfigField "boolean", "ALLOW_HTTP", "false"
-        buildConfigField "boolean", "EXTERNAL_IN_APP", "false"
-        buildConfigField "boolean", "PULL_REFRESH", "true"
-        buildConfigField "boolean", "UPLOAD_ENABLED", "true"
-        buildConfigField "boolean", "DOWNLOADS_ENABLED", "true"
-        buildConfigField "boolean", "ZOOM_ENABLED", "false"
-        buildConfigField "String", "REST_BASE", "\\"https://my.fc-jamavaran.ir/admin/appsaz/\\""
-        buildConfigField "String", "APP_KEY", "\\"JV70ec9cac190e475a\\""
-        buildConfigField "String", "CUSTOM_CSS", "\\"\\""
-        buildConfigField "String", "CUSTOM_JS", "\\"\\""
+        buildConfigField 'boolean', 'ALLOW_HTTP', 'false'
+        buildConfigField 'boolean', 'EXTERNAL_IN_APP', 'false'
+        buildConfigField 'boolean', 'PULL_REFRESH', 'true'
+        buildConfigField 'boolean', 'UPLOAD_ENABLED', 'true'
+        buildConfigField 'boolean', 'DOWNLOADS_ENABLED', 'true'
+        buildConfigField 'boolean', 'ZOOM_ENABLED', 'false'
+        buildConfigField 'String', 'REST_BASE', '"https://my.fc-jamavaran.ir/admin/appsaz/"'
+        buildConfigField 'String', 'APP_KEY', '"JV70ec9cac190e475a"'
+        buildConfigField 'String', 'CUSTOM_CSS', '""'
+        buildConfigField 'String', 'CUSTOM_JS', '""'
     }
 
     signingConfigs {
-        if (hasReleaseSigning) {
-            release {
-                storeFile rootProject.file(signingProperties.getProperty("storeFile"))
-                storePassword signingProperties.getProperty("storePassword")
-                keyAlias signingProperties.getProperty("keyAlias")
-                keyPassword signingProperties.getProperty("keyPassword")
-                storeType signingProperties.getProperty("storeType", "PKCS12")
-            }
+        release {
+            storeFile rootProject.file(signingProperties.getProperty('storeFile'))
+            storePassword signingProperties.getProperty('storePassword')
+            keyAlias signingProperties.getProperty('keyAlias')
+            keyPassword signingProperties.getProperty('keyPassword')
+            storeType signingProperties.getProperty('storeType', 'PKCS12')
         }
     }
 
     buildTypes {
         release {
             minifyEnabled false
-            if (hasReleaseSigning) {
-                signingConfig signingConfigs.release
-            }
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
-    buildFeatures { buildConfig true }
+    buildFeatures {
+        buildConfig true
+    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
-    kotlinOptions { jvmTarget = '17' }
+
+    kotlinOptions {
+        jvmTarget = '17'
+    }
 }
 
 dependencies {
@@ -77,22 +76,4 @@ dependencies {
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation 'androidx.activity:activity-ktx:1.9.0'
     implementation 'com.google.firebase:firebase-messaging:24.0.0'
-}
-
-tasks.register("verifyReleaseSigning") {
-    doLast {
-        if (!hasReleaseSigning) {
-            throw new GradleException(
-                "Release signing is not configured. Add keystore.properties and the original WebIntoApp keystore, or configure the required GitHub Actions secrets."
-            )
-        }
-        def keyFile = rootProject.file(signingProperties.getProperty("storeFile"))
-        if (!keyFile.exists()) {
-            throw new GradleException("Keystore file not found: " + keyFile)
-        }
-    }
-}
-
-tasks.matching { it.name == "assembleRelease" || it.name == "bundleRelease" }.configureEach {
-    dependsOn("verifyReleaseSigning")
 }
